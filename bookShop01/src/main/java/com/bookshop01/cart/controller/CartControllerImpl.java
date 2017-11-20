@@ -58,16 +58,19 @@ public class CartControllerImpl extends BaseController implements CartController
 			}
 		}
 		//상품 번호를 분리한 후 상품 번호로 각 상품 정보를 조회한다.
-		String[] goods_ids=cart_value.split("-");
-		ArrayList goods_id_list=new ArrayList();
-		for(int i=0;i<goods_ids.length;i++) {
-			goods_id_list.add(goods_ids[i]);
-		}
 		HashMap cartHash=new HashMap();
-		ArrayList my_goods_list= cartService.myCartMainCookie(goods_id_list);
-		cartHash.put("my_goods_list", my_goods_list);
-		mav.addObject("cartHash", cartHash);
-		
+		if(cart_value==null || cart_value.length()==0) {
+			cartHash.put("my_goods_list", null);
+		}else {
+			String[] goods_ids=cart_value.split("-");
+			ArrayList goods_id_list=new ArrayList();
+			for(int i=0;i<goods_ids.length;i++) {
+				goods_id_list.add(goods_ids[i]);
+			}
+			ArrayList my_goods_list= cartService.myCartMainCookie(goods_id_list);
+			cartHash.put("my_goods_list", my_goods_list);
+		}
+		mav.addObject("cartHash", cartHash);		
 		return mav;
 	}
 

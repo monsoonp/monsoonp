@@ -108,6 +108,15 @@
 									#{member_id})
 							
 	</insert>
-	
+	<resultMap type="com.bookshop01.cart.vo.CartBean" id="cartResult">
+		<result property="goods_id" column="goods_id" javaType="string"/>
+	</resultMap>
+	<parameterMap type="hashmap" id="paramMap">
+		<parameter property="arr_goods_id" mode="IN" jdbcType="table" javaType="array"/>
+		<parameter property="result" mode="OUT" jdbcType="CURSOR" javaType="cartResult"/>
+	</parameterMap>
+	<select id="proc_addCartFromCookie"  statementType="CALLABLE" parameterType="hashmap"> 
+             { call bookshop_cart.proc_addCartFromCookie(?,?)} 
+    </select>
 	
 </mapper>

@@ -53,19 +53,19 @@ public class CartServiceImpl  implements CartService{
 	public void addCartFromCookie(ArrayList cart_list_cookie)throws Exception{
 		//먼저 기존의 cart테이블에서 회원 아이디로 상품아이디를 조회한 후, 
 		//쿠키에서 넘어온 상품 아이디와 비교해서 다른 상품 아이디만 cart 테이블에 추가한다.
-		CartBean cartBean=(CartBean)cart_list_cookie.get(0);
+		/*CartBean cartBean=(CartBean)cart_list_cookie.get(0);
 		ArrayList my_cart_list=cartDao.myCartList(cartBean);
 		for(int i=0;i<my_cart_list.size();i++) {
 			CartBean bean=(CartBean)my_cart_list.get(i);
 			String goods_id=bean.getGoods_id();
-			for(int j=0;j<cart_list_cookie.size();j++) {
+			for(int j=cart_list_cookie.size()-1;j>=0;j--) {
 				CartBean bean_cookie=(CartBean)cart_list_cookie.get(j);
 				String goods_id_cookie=bean_cookie.getGoods_id();
 				if(goods_id.equals(goods_id_cookie)) {
 					cart_list_cookie.remove(j);
 				}
 			}
-		}
+		}*/
 		cartDao.addCartFromCookie(cart_list_cookie);
 	}
 

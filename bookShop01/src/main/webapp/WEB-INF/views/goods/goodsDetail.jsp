@@ -74,7 +74,48 @@
 			}
 		});
 	}
-		
+	function ad_c(goods_id){
+		var str_cookie="";
+		$.ajax({
+			type : "post",
+			async : false, //false인 경우 동기식으로 처리한다.
+			url : "http://localhost:8090/bookshop01/cart/addCart.do",
+			data : {
+				goods_id:goods_id
+			},
+			success : function(data, textStatus) {
+				if(data.trim()=='add_success'){
+					imagePopup('open', '.layer01');	
+					cookie = document.cookie.split(";");  //쿠키를 ;로 분리한다.
+					for(var i=0; i<cookie.length;i++){
+						element=cookie[i].split("=");
+						 alert("element[0]="+element[0]); 				
+						 if(element[0]=='cart'){
+							 alert("goods_id="+element[1]);
+							 str_cookie=element[1];
+						 }
+					}
+					//기존 쿠키의 값을 가지고 와서 함수로 전달된 상품번호를 '-'으로 연결한 후 다시 쿠키에 저장
+					if(str_cookie==''){
+						str_cookie+=goods_id;
+					}else{
+						str_cookie+="-"+goods_id;
+					}
+					//str_cookie+="-"+goods_id;
+					//document.cookie="cart="+str_cookie;
+					document.cookie="cart="+str_cookie+";path=/;expires=100"; 
+				}else if(data.trim()=='already_existed'){
+					alert("이미 카트에 등록된 제품입니다.");	
+				}
+			},
+			error : function(data, textStatus) {
+				alert("에러가 발생했습니다."+data);
+			},
+			complete : function(data, textStatus) {
+				//alert("완료");
+			}
+		});
+	}	
 	function add_cart_cookie(goods_id){
 		//1.기존의 쿠키에 저장된 상품 번호를 읽어온다.
 		//2.기존의 상품번호에 새로 저장할 상품번호를 문자열로 결합해서 다시 쿠키에 저장한다.

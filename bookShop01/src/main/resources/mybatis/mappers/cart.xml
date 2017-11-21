@@ -108,7 +108,7 @@
 									#{member_id})
 							
 	</insert>
-	<resultMap type="com.bookshop01.cart.vo.CartBean" id="cartResult">
+<!-- 	<resultMap type="com.bookshop01.cart.vo.CartBean" id="cartResult">
 		<result property="goods_id" column="goods_id" javaType="string"/>
 	</resultMap>
 	<parameterMap type="hashmap" id="paramMap">
@@ -118,5 +118,5 @@
 	<select id="proc_addCartFromCookie"  statementType="CALLABLE" parameterType="hashmap"> 
              { call bookshop_cart.proc_addCartFromCookie(?,?)} 
     </select>
-	
+ -->	
 </mapper>

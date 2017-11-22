@@ -12,5 +12,6 @@ public interface GoodsDao {
 	public ArrayList keywordSearch(String keyword) throws Exception;
 	public ArrayList searchGoods(String searchWord) throws Exception;
 	public ArrayList searchGoods(HashMap searchMap) throws Exception;
-	
+	public ArrayList recoGoodsList(String goods_id)throws Exception;
+	public ArrayList recoGoodsPoint(String goods_id )throws Exception;
 }

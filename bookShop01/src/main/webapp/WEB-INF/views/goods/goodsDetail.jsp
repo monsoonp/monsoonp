@@ -36,6 +36,23 @@
 	z-index: 4;
 	float: right;
 }
+ .div1{
+    position:relative;    
+    float:left;
+	/* margin-right:10px; */
+	width:130px;
+	height:200px;
+	margin-left:10px;
+	margin-bottom:50px;
+	/* border:solid black 1px; */
+  }
+  
+  .clr{
+    clear:left;
+  }
+  .img1{
+  	padding-top:50px;
+  }
 </style>
 <script type="text/javascript">
 	function add_cart(goods_id,isLogOn) {
@@ -74,48 +91,7 @@
 			}
 		});
 	}
-	function ad_c(goods_id){
-		var str_cookie="";
-		$.ajax({
-			type : "post",
-			async : false, //false인 경우 동기식으로 처리한다.
-			url : "http://localhost:8090/bookshop01/cart/addCart.do",
-			data : {
-				goods_id:goods_id
-			},
-			success : function(data, textStatus) {
-				if(data.trim()=='add_success'){
-					imagePopup('open', '.layer01');	
-					cookie = document.cookie.split(";");  //쿠키를 ;로 분리한다.
-					for(var i=0; i<cookie.length;i++){
-						element=cookie[i].split("=");
-						 alert("element[0]="+element[0]); 				
-						 if(element[0]=='cart'){
-							 alert("goods_id="+element[1]);
-							 str_cookie=element[1];
-						 }
-					}
-					//기존 쿠키의 값을 가지고 와서 함수로 전달된 상품번호를 '-'으로 연결한 후 다시 쿠키에 저장
-					if(str_cookie==''){
-						str_cookie+=goods_id;
-					}else{
-						str_cookie+="-"+goods_id;
-					}
-					//str_cookie+="-"+goods_id;
-					//document.cookie="cart="+str_cookie;
-					document.cookie="cart="+str_cookie+";path=/;expires=100"; 
-				}else if(data.trim()=='already_existed'){
-					alert("이미 카트에 등록된 제품입니다.");	
-				}
-			},
-			error : function(data, textStatus) {
-				alert("에러가 발생했습니다."+data);
-			},
-			complete : function(data, textStatus) {
-				//alert("완료");
-			}
-		});
-	}	
+	
 	function add_cart_cookie(goods_id){
 		//1.기존의 쿠키에 저장된 상품 번호를 읽어온다.
 		//2.기존의 상품번호에 새로 저장할 상품번호를 문자열로 결합해서 다시 쿠키에 저장한다.
@@ -128,16 +104,26 @@
 		var str_cookie="";
 		
 		//if(document.cookie != ""){
-			cookie = document.cookie.split(";");  //쿠키를 ;로 분리한다.
-			for(var i=0; i<cookie.length;i++){
-				element=cookie[i].split("=");
-				 alert("element[0]="+element[0]); 				
-				 if(element[0]=='cart'){
-					 alert("goods_id="+element[1]);
-					 str_cookie=element[1];
-				 }
-			}
+		cookie = document.cookie.split(";");  //쿠키를 ;로 분리한다.
+		for(var i=0; i<cookie.length;i++){
+			element=cookie[i].split("=");
+			 alert("element[0]="+element[0]); 				
+			 if(element[0]=='cart'){
+				 alert("goods_id="+element[1]);
+				 str_cookie=element[1];
+			 }
+		}
 		//}
+		//쿠키에 상푸번호가 존재하는지 체크한다.
+		var goods_ids=str_cookie.split("-");
+		for(var i=0; i<goods_ids.length;i++){
+			if(goods_id==goods_ids[i]){
+				alert("이미 등록된 상품입니다.");
+				return;
+			}
+			
+		}
+		
 		//기존 쿠키의 값을 가지고 와서 함수로 전달된 상품번호를 '-'으로 연결한 후 다시 쿠키에 저장
 		if(str_cookie==''){
 			str_cookie+=goods_id;
@@ -147,6 +133,7 @@
 		//str_cookie+="-"+goods_id;
 		//document.cookie="cart="+str_cookie;
 		document.cookie="cart="+str_cookie+";path=/;expires=100"; 
+		imagePopup('open', '.layer01');	
 	}
 
 	function imagePopup(type) {
@@ -309,6 +296,7 @@ function fn_order_each_goods(goods_id,goods_title,goods_sales_price,fileName){
 			<li><a href="#tab4">출판사서평</a></li>
 			<li><a href="#tab5">추천사</a></li>
 			<li><a href="#tab6">리뷰</a></li>
+			<li><a href="#tab7">추천도서</a></li>
 		</ul>
 		<div class="tab_container">
 			<div class="tab_content" id="tab1">
@@ -340,7 +328,35 @@ function fn_order_each_goods(goods_id,goods_title,goods_sales_price,fileName){
 			</div>
 			<div class="tab_content" id="tab6">
 				<h4>리뷰</h4>
-						
+			</div>
+			<div class="tab_content" id="tab7">
+				<h4>추천도서</h4>
+				<%-- <img class="img1" width="100px" height="100px" 
+				src="${pageContext.request.contextPath }/resources/image/lens2.jpg"/>
+				 --%>
+		<%-- <c:forEach var="i" begin="1" end="10" step="1"> --%>
+		<c:forEach var="goods" items="${goodsMap.recoGoodsList }" varStatus="status">
+			<div class="div1">
+			<a href="${pageContext.request.contextPath}/goods/goodsDetail.do?goods_id=${goods.goods_id }">
+				<img width="100px" height="100px"
+				src="${pageContext.request.contextPath}/fileDownload.do?goods_id=${goodsMap.goods.goods_id}&fileName=${goods.goods_fileName}"/>
+				<%-- <img class="img1" width="100px" height="100px" 
+				src="${pageContext.request.contextPath }/resources/image/lens2.jpg"/> --%>
+			</a>
+			<ul>
+				<li><a href="#">${goods.goods_title }</a></li>
+				<li style="color:blue;">판매지수: ${goodsMap.recoGoodsPoint[status.count-1].sales_index}</li>
+				<li style="color:blue;">사용자리뷰수: ${goodsMap.recoGoodsPoint[status.count-1].user_review_point}</li>
+				<li style="color:blue;">상품조회수: ${goodsMap.recoGoodsPoint[status.count-1].goods_hit_point}</li>
+				<li style="color:blue;">전문자평가점수: ${goodsMap.recoGoodsPoint[status.count-1].expert_eval_point}</li>
+
+			</ul>
+			</div>
+			<c:if test="${status.count%5==0 }">
+				<div class="clr"></div>
+			</c:if>
+		</c:forEach>
+				
 			</div>
 		</div>
 	</div>
@@ -352,10 +368,20 @@ function fn_order_each_goods(goods_id,goods_title,goods_sales_price,fileName){
 			<a href="javascript:" onClick="javascript:imagePopup('close', '.layer01');"> <img
 				src="${pageContext.request.contextPath}/image/close.png" id="close" />
 			</a> <br /> <font size="12" id="contents">장바구니에 담았습니다.</font><br>
-<form action='${pageContext.request.contextPath}/cart/myCartMain.do'>				
-		<input  name="btn_cart_list" type="submit" value="장바구니 보기">
-			<div></div>
-</form>			
+	<c:choose>			
+	<c:when test="${isLogOn==true }">
+		<form action='${pageContext.request.contextPath}/cart/myCartMain.do'>				
+				<input  name="btn_cart_list" type="submit" value="장바구니 보기">
+		</form>	
+	</c:when>
+	<c:otherwise>
+		<form action='${pageContext.request.contextPath}/cart/myCartMainCookie.do'>				
+				<input  name="btn_cart_list" type="submit" value="장바구니 보기">		
+		</form>	
+	</c:otherwise>
+	</c:choose>	
+		<div>
+	</div>	
 </body>
 </html>
 <input type="hidden" name="isLogOn" id="isLogOn" value="${isLogOn}"/>

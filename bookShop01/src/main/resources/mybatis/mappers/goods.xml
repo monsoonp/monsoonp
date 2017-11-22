@@ -35,6 +35,16 @@
 	   <result property="fileType" column="fileType" />
 	</resultMap>
 	
+	<resultMap id="recoResult" type="com.bookshop01.goods.vo.RecoBean">
+	   <result property="reco_id" column="reco_id" />
+	   <result property="goods_hit_point" column="goods_hit_point" />
+	   <result property="expert_eval_point" column="expert_eval_point" />
+	   <result property="sales_index" column="sales_index" />
+	   <result property="reco_goods_id" column="reco_goods_id" />
+   	   <result property="regDate" column="regDate" />
+   	   <result property="member_id" column="member_id" />
+   	   <result property="goods_id" column="goods_id" />
+	</resultMap>
 
 	
    
@@ -121,7 +131,25 @@
 			</when>
 		</choose>
 	</select>	
+	<select id="recoGoodsList" resultType="String"   resultMap="goodsResult"  >
+	    <![CDATA[
+           select g.*,d.fileName from t_goods_info g, t_goods_detail_image d
+			        where g.goods_id=d.goods_id
+			        and d.filetype='main_image'
+                    and g.goods_id in(select reco_goods_id from t_shoping_reco
+                                        where goods_id=#{goods_id})
+			        order by g.goods_creDate desc
+		]]>
+	</select>
 	
+	<select id="recoGoodsPoint" resultType="String"   resultMap="recoResult"  >
+	    <![CDATA[
+           select * from t_shoping_reco
+   				 where goods_id in (select goods_id 
+			                        from t_shoping_reco
+			                        where goods_id=#{goods_id})
+		]]>
+	</select>
 	
 
 </mapper>

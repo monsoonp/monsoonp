@@ -47,6 +47,11 @@ public class GoodsServiceImpl implements GoodsService{
 		ArrayList imageList =goodsDao.goodsDetailImage(_goods_id);
 		goodsMap.put("imageList", imageList);
 		
+		ArrayList reco_goods_list=goodsDao.recoGoodsList(_goods_id);
+		goodsMap.put("recoGoodsList", reco_goods_list);
+		
+		ArrayList reco_goods_point=goodsDao.recoGoodsPoint(_goods_id);
+		goodsMap.put("recoGoodsPoint", reco_goods_point);
 		return goodsMap;
 	}
 	

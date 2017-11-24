@@ -151,5 +151,39 @@
 		]]>
 	</select>
 	
+	<select id="myRecoList" parameterType="String" resultType="com.bookshop01.goods.vo.GoodsBean">
+		select g.*,d.fileName as goods_fileName 
+			from t_goods_info g, t_goods_detail_image d
+	        where g.goods_id=d.goods_id
+	        and d.filetype='main_image'
+	        and g.goods_id=#{goods_id}
+	        order by g.goods_creDate desc
+	</select>
+	<insert id="addShopingReco" parameterType="hashmap">
+		<![CDATA[
+			insert into t_shoping_reco(reco_id,
+			                            user_review_point,
+			                            goods_hit_point,
+			                            expert_eval_point,
+			                            sales_index,
+			                            reco_goods_id,
+			                            regDate,
+			                            member_id,
+			                            goods_id)
+			                    values(seq_reco_id.nextval,
+			                            1000,
+			                            1000,
+			                            1000,
+			                            1000,
+			                            '#{recoed_goods_id}',
+			                            sysdate,
+			                            'hong',
+			                            '#{goods_id}')
+					
+										
+			
+		]]>
+	</insert>
+	
 
 </mapper>

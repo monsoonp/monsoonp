@@ -52,6 +52,16 @@
 	border: 3px solid #87cb42;
 }
 
+#d_reco_list {
+	z-index: 3;
+	position: absolute;
+	text-align: center;
+	left: 30%;
+	top: 15%;
+	width:600px;
+	background-color: #ccffff;
+	border: 3px solid #87cb42;
+}
 #close {
 	z-index: 4;
 	float: right;
@@ -288,9 +298,42 @@ function fn_order_each_goods(goods_id,goods_title,goods_sales_price,fileName){
 		}
 	}
 	
-	function fn_reco_list_on(){
+	function fn_reco_list_on(type){
 		var d_reco_list=document.getElementById("d_reco_list");
-		d_reco_list.style.display="block";
+		if(type=='open'){
+			d_reco_list.style.display="block";	
+		}else if(type=="close"){
+			d_reco_list.style.display="none";
+		}
+	}
+	
+	function fn_add_shoping_reco(recoed_goods_id){
+		alert(recoed_goods_id);
+		//return;
+		var form = document.createElement("form");
+		form.setAttribute("method", "post");
+		form.action="${pageContext.request.contextPath}/goods/addShopingReco.do";
+		document.body.appendChild(form);
+		var recoChk=document.getElementsByName("recoChk");
+
+		//alert(recoChk.length);
+		for(var i=0; i<recoChk.length;i++){
+			if(recoChk[i].checked==true){
+				//alert(recoChk[i].value);
+				var inTag=document.createElement("input");
+				inTag.setAttribute("type","hidden");
+				inTag.setAttribute("name","recoChk");
+				inTag.setAttribute("value",recoChk[i].value);
+				form.appendChild(inTag);
+			}
+		} 
+		
+		var inTag2=document.createElement("input");
+		inTag2.setAttribute("type","hidden");
+		inTag2.setAttribute("name","recoed_goods_id");
+		inTag2.setAttribute("value",recoed_goods_id);
+		form.appendChild(inTag2);
+		form.submit();
 	}
 </script>
 </head>
@@ -468,35 +511,53 @@ function fn_order_each_goods(goods_id,goods_title,goods_sales_price,fileName){
 			</c:if>
 			<c:if test="${status.last==true }">
 				<div class="div1">
-					<%-- <a href="${pageContext.request.contextPath}/goods/goodsDetail.do?goods_id=${goods.goods_id }"> --%>
-						<img id="img_reco" width="50px" height="50px"
-							onClick="fn_reco_list_on()"
-						src="${pageContext.request.contextPath}/resources/image/lens2.jpg">
+						<img id="img_reco" onClick="fn_reco_list_on('open')"
+						src="${pageContext.request.contextPath}/resources/image/plus.jpg">
 						<%-- <img class="img1" width="100px" height="100px" 
 						src="${pageContext.request.contextPath }/resources/image/lens2.jpg"/> --%>
-					<!-- </a> -->
-				
+					
 				</div>
 			</c:if>
 		</c:forEach>
 		<!-- 추천도서 팝업창용 div -->
 			<div id="d_reco_list" style="display:none;">
-				<table border="1" width="800px" align="center">
-					<tr>
+				<table border="0" width="100%">
+					<tr align="center" bgcolor="lightyellow">
 						<td>구분</td>
-						<td>상품명</td>
-						<td>판매가</td>
+						<td colspan="2">상품명</td>
+						<td>판매가</td>	
 					</tr>
-				<c:forEach var="i" begin="1" end="5" step="1">
 					<tr>
-						<td><input type="checkbox" />
-						<td>
-							<img width="100px" height="100px" src="${pageContext.request.contextPath}/resources/image/lens2.jpg">
+						<td colspan="4"> 
+							<hr>
 						</td>
-						<td>${27,000 }원</td>
+					</tr>
+					
+				<%-- <c:forEach var="i" begin="1" end="5" step="1"> --%>
+				<c:forEach var="recoGoods" items="${goodsMap.my_reco_goods_list }">
+					<tr align="center">
+						<td><input type="checkbox" name="recoChk" value="${recoGoods.goods_id}"/>
+						<td>
+							<img width="100px" height="100px" 
+								src="${pageContext.request.contextPath}/fileDownload.do?goods_id=${recoGoods.goods_id}&fileName=${recoGoods.goods_fileName}">
+						</td>
+						<td>
+							${recoGoods.goods_title }
+						</td>
+						<td>${recoGoods.goods_price }원</td>
+					</tr>
+					<tr>
+						<td colspan="4"> 
+							<hr>
+						</td>
 					</tr>
 				</c:forEach>
-				
+					<tr align="center">
+						<td colspan="4">
+							<input type="button" value="추천도서반영하기" onClick="fn_add_shoping_reco('${goodsMap.goods.goods_id}')"/>
+							<input type="button" value="닫기" onClick="fn_reco_list_on('close')"/>
+						</td>
+					</tr>
 				</table>
 			</div>
 		

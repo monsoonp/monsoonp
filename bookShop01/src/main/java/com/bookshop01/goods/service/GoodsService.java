@@ -13,10 +13,11 @@ import com.bookshop01.goods.vo.GoodsBean;
 public interface GoodsService {
 	
 	public HashMap<String,ArrayList<GoodsBean>> listGoods() throws Exception;
-	public HashMap goodsDetail(String _goods_id) throws Exception;
-	
+	//public HashMap goodsDetail(String _goods_id) throws Exception;
+	public HashMap goodsDetail(HashMap detailMap ) throws Exception;
 	public ArrayList keywordSearch(String keyword) throws Exception;
 	public ArrayList searchGoods(String searchWord) throws Exception;
 	public ArrayList searchGoods(HashMap searchMap) throws Exception;
+	public void addShopingReco(ArrayList reco_shoping_list,String recoed_goods_id)throws Exception;
 
 }

@@ -14,5 +14,6 @@ public interface CartDao {
 	public void modifyCartQty(CartBean cartBean) throws Exception;
 	public void deleteCartGoods(int cart_id) throws Exception;
 	public void addCartFromCookie(ArrayList cart_list_cookie)throws Exception;
+	
 
 }

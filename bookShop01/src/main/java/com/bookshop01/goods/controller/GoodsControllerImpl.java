@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.bookshop01.common.controller.BaseController;
 import com.bookshop01.goods.service.GoodsService;
 import com.bookshop01.goods.vo.GoodsBean;
+import com.bookshop01.member.vo.MemberBean;
 
 @Controller("goodsController")
 @RequestMapping(value="/goods")
@@ -30,14 +32,40 @@ public class GoodsControllerImpl  extends BaseController implements GoodsControl
 	
 	@RequestMapping(value="/goodsDetail.do" ,method = RequestMethod.GET)
 	public ModelAndView goodsDetail(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String reco_value=null;
+		HashMap detailMap=new HashMap();
+		ArrayList my_reco_list=new ArrayList();
+		Cookie[] allValues=request.getCookies();
+		for(int i=0;i<allValues.length;i++) {
+			if(allValues[i].getName().equals("recoGoodsId")) {
+				System.out.println(allValues[i].getValue());
+				reco_value=allValues[i].getValue();
+				break;
+			}
+		}
+		//HashMap cartHash=new HashMap();
+		if(reco_value==null || reco_value.length()==0) {
+			//cartHash.put("my_goods_list", null);
+		}else {
+			String[] goods_ids=reco_value.split("-");
+			my_reco_list=new ArrayList();
+			for(int i=0;i<goods_ids.length;i++) {
+				my_reco_list.add(goods_ids[i]);
+			}
+		}
+		//mav.addObject("cartHash", cartHash);	
 		String goods_id = request.getParameter("goods_id");
 		String fileName=getFileName(request);
 		HttpSession session=request.getSession();
-		HashMap goodsMap=goodsService.goodsDetail(goods_id);
+		detailMap.put("my_reco_list", my_reco_list);
+		detailMap.put("goods_id", goods_id);
+		//HashMap goodsMap=goodsService.goodsDetail(goods_id);
+		HashMap goodsMap=goodsService.goodsDetail(detailMap);
 		ModelAndView mav = new ModelAndView(fileName);
 		mav.addObject("goodsMap", goodsMap);
 		GoodsBean goodsBean=(GoodsBean)goodsMap.get("goods");
 		add_goods_in_sticky(goods_id,goodsBean,session);
+		
 		return mav;
 	}
 	
@@ -85,6 +113,29 @@ public class GoodsControllerImpl  extends BaseController implements GoodsControl
 		mav.addObject("search_goods_list", search_goods_list);
 		return mav;
 		
+	}
+	@RequestMapping(value="/addShopingReco.do" ,method = RequestMethod.POST)
+	public ModelAndView addShopingReco(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		System.out.println("addShopingReco 메서드 호출");
+		//String searchWord = request.getParameter("addShopingReco 메소드");
+		String fileName=getFileName(request);
+		String[] recoChk=request.getParameterValues("recoChk");
+		String recoed_goods_id=request.getParameter("recoed_goods_id");
+		ArrayList reco_shoping_list=new ArrayList();
+		for(String temp:recoChk) {
+			reco_shoping_list.add(temp);
+		}
+		
+		//회원 아이디를 가지고온다.
+		HttpSession session=request.getSession();
+		MemberBean memberBean=(MemberBean)session.getAttribute("member_info");
+		String member_id=(String)memberBean.getMember_id();
+		goodsService.addShopingReco(reco_shoping_list,recoed_goods_id);
+		
+		/*ArrayList search_goods_list=goodsService.searchGoods(searchWord);
+		ModelAndView mav = new ModelAndView(fileName);
+		mav.addObject("search_goods_list", search_goods_list);*/
+		return null;
 	}
 	
 	/*@RequestMapping(value="/searchGoods.do" ,method = RequestMethod.GET)

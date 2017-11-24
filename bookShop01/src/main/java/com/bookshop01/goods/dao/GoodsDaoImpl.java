@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 
+import com.bookshop01.cart.vo.CartBean;
 import com.bookshop01.goods.vo.GoodsBean;
 
 @Repository("goodsDao")
@@ -63,5 +64,26 @@ public class GoodsDaoImpl  implements GoodsDao{
 		ArrayList reco_goods_point=(ArrayList)sqlSession.selectList("mapper.goods.recoGoodsPoint",goods_id);
 		return reco_goods_point;
 	}
+
+	public ArrayList myRecoList(ArrayList my_reco_list )throws Exception{
+		String goods_id=null;
+		ArrayList reco_goods_list=new ArrayList();
+		for(int i=0; i<my_reco_list.size();i++) {
+			goods_id=(String)my_reco_list.get(i);
+			GoodsBean goodsBean=(GoodsBean)sqlSession.selectOne("mapper.goods.myRecoList",goods_id);
+			reco_goods_list.add(goodsBean);
+		}
+		return reco_goods_list;
+	}
+public void addShopingReco(ArrayList reco_shoping_list,String recoed_goods_id)throws Exception{
+	String goods_id=null;	//추천하는 상품번호
+	HashMap map=new HashMap();
+	map.put("recoed_goods_id", recoed_goods_id);
+	for(int i=0;i<reco_shoping_list.size();i++) {
+		goods_id =(String)reco_shoping_list.get(i);
+		map.put("goods_id", goods_id);
+		sqlSession.insert("mapper.goods.addShopingReco",map );
+	}
+}
 
 }

@@ -52,6 +52,9 @@ public class GoodsServiceImpl implements GoodsService{
 		ArrayList reco_goods_list=goodsDao.recoGoodsList(_goods_id);
 		goodsMap.put("recoGoodsList", reco_goods_list);
 		
+		ArrayList reco_goods_point=goodsDao.recoGoodsPoint(_goods_id);
+		goodsMap.put("recoGoodsPoint", reco_goods_point);
+		
 		//내 추천도서 카트의 상품번호에 대한 상품정보 가지고 오기
 		ArrayList my_reco_list=(ArrayList)detailMap.get("my_reco_list");
 		ArrayList my_reco_goods_list=goodsDao.myRecoList(my_reco_list);

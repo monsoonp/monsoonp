@@ -131,11 +131,11 @@ public class GoodsControllerImpl  extends BaseController implements GoodsControl
 		MemberBean memberBean=(MemberBean)session.getAttribute("member_info");
 		String member_id=(String)memberBean.getMember_id();
 		goodsService.addShopingReco(reco_shoping_list,recoed_goods_id,member_id);
-		
+		ModelAndView mav=new ModelAndView("redirect:goodsDetail.do?goods_id="+recoed_goods_id);
 		/*ArrayList search_goods_list=goodsService.searchGoods(searchWord);
 		ModelAndView mav = new ModelAndView(fileName);
 		mav.addObject("search_goods_list", search_goods_list);*/
-		return null;
+		return mav;
 	}
 	
 	/*@RequestMapping(value="/searchGoods.do" ,method = RequestMethod.GET)

@@ -468,10 +468,16 @@ function fn_order_each_goods(goods_id,goods_title,goods_sales_price,fileName){
 			</div>
 			<div class="tab_content" id="tab7">
 				<h4>추천도서</h4>
-				<%-- <img class="img1" width="100px" height="100px" 
-				src="${pageContext.request.contextPath }/resources/image/lens2.jpg"/>
-				 --%>
-		<%-- <c:forEach var="i" begin="1" end="10" step="1"> --%>
+	<c:choose>		
+		<c:when test="${empty goodsMap.recoGoodsList  }">
+			<div class="div1">
+						<img id="img_reco" onClick="fn_reco_list_on('open')"
+						src="${pageContext.request.contextPath}/resources/image/plus.jpg">	
+			</div>
+		</c:when>
+		<c:otherwise>
+		
+	
 		<c:forEach var="goods" items="${goodsMap.recoGoodsList }" varStatus="status">
 			<div class="div1">
 			<a href="${pageContext.request.contextPath}/goods/goodsDetail.do?goods_id=${goods.goods_id }">
@@ -506,19 +512,20 @@ function fn_order_each_goods(goods_id,goods_title,goods_sales_price,fileName){
 			
 			</div>
 			
-			<c:if test="${status.count%5==0 }">
+			<c:if test="${status.count%4==0 }">
 				<div class="clr"></div>
 			</c:if>
 			<c:if test="${status.last==true }">
 				<div class="div1">
 						<img id="img_reco" onClick="fn_reco_list_on('open')"
 						src="${pageContext.request.contextPath}/resources/image/plus.jpg">
-						<%-- <img class="img1" width="100px" height="100px" 
-						src="${pageContext.request.contextPath }/resources/image/lens2.jpg"/> --%>
-					
+						
 				</div>
 			</c:if>
 		</c:forEach>
+		
+		</c:otherwise>
+	</c:choose>
 		<!-- 추천도서 팝업창용 div -->
 			<div id="d_reco_list" style="display:none;">
 				<table border="0" width="100%">

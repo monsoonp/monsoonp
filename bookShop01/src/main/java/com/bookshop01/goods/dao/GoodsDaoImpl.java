@@ -76,13 +76,13 @@ public class GoodsDaoImpl  implements GoodsDao{
 		return reco_goods_list;
 	}
 public void addShopingReco(ArrayList reco_shoping_list,String recoed_goods_id,String member_id)throws Exception{
-	String goods_id=null;	//추천하는 상품번호
+	String reco_goods_id=null;	//추천하는 상품번호
 	HashMap map=new HashMap();
-	map.put("recoed_goods_id", recoed_goods_id);
+	map.put("goods_id", recoed_goods_id);
 	map.put("member_id", member_id);
 	for(int i=0;i<reco_shoping_list.size();i++) {
-		goods_id =(String)reco_shoping_list.get(i);
-		map.put("goods_id", goods_id);
+		reco_goods_id =(String)reco_shoping_list.get(i);
+		map.put("reco_goods_id", reco_goods_id);
 		sqlSession.insert("mapper.goods.addShopingReco",map );
 	}
 }

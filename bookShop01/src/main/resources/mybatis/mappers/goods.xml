@@ -145,7 +145,7 @@
 	<select id="recoGoodsPoint" resultType="String"   resultMap="recoResult"  >
 	    <![CDATA[
            select * from t_shoping_reco
-   				 where goods_id in (select goods_id 
+   				 where reco_goods_id in (select reco_goods_id 
 			                        from t_shoping_reco
 			                        where goods_id=#{goods_id})
 		]]>
@@ -175,13 +175,10 @@
 			                            1000,
 			                            1000,
 			                            1000,
-			                            '#{recoed_goods_id}',
+			                            #{reco_goods_id},
 			                            sysdate,
-			                            '#{member_id}',
-			                            '#{goods_id}')
-					
-										
-			
+			                            #{member_id},
+			                            #{goods_id})			
 		]]>
 	</insert>
 	

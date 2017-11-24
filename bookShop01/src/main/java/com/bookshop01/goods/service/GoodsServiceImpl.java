@@ -64,8 +64,8 @@ public class GoodsServiceImpl implements GoodsService{
 		return goodsList;
 	}
 	
-	public void addShopingReco(ArrayList reco_shoping_list,String recoed_goods_id)throws Exception{
-		goodsDao.addShopingReco(reco_shoping_list,recoed_goods_id);
+	public void addShopingReco(ArrayList reco_shoping_list,String recoed_goods_id,String member_id)throws Exception{
+		goodsDao.addShopingReco(reco_shoping_list,recoed_goods_id, member_id);
 	}
 
 	

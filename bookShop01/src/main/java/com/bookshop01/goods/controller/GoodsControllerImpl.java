@@ -130,7 +130,7 @@ public class GoodsControllerImpl  extends BaseController implements GoodsControl
 		HttpSession session=request.getSession();
 		MemberBean memberBean=(MemberBean)session.getAttribute("member_info");
 		String member_id=(String)memberBean.getMember_id();
-		goodsService.addShopingReco(reco_shoping_list,recoed_goods_id);
+		goodsService.addShopingReco(reco_shoping_list,recoed_goods_id,member_id);
 		
 		/*ArrayList search_goods_list=goodsService.searchGoods(searchWord);
 		ModelAndView mav = new ModelAndView(fileName);

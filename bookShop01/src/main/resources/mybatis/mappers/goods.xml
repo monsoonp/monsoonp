@@ -177,7 +177,7 @@
 			                            1000,
 			                            '#{recoed_goods_id}',
 			                            sysdate,
-			                            'hong',
+			                            '#{member_id}',
 			                            '#{goods_id}')
 					
 										
